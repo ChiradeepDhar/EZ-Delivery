@@ -70,5 +70,5 @@ export class ResetPasswordDto {
 
 // COMPLETE SET OF INFRASTRUCTURE in code
 //final set view point
-//fine
+//fine set
 //final 
