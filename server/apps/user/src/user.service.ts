@@ -33,4 +33,13 @@ export class UserService {
     };
     return user;
   }
+
+  //get all users service
+  async getUsers() {
+    const users = [];
+
+    return users;
+  }
 }
+
+

@@ -22,7 +22,7 @@ export class ErrorType {
 // }
 
 @ObjectType()
-export class RegisterReponse {
+export class RegisterResponse {
     @Field(() => User, { nullable: true })
     user?: User | any;
 
