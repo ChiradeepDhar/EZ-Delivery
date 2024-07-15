@@ -68,7 +68,3 @@ export class ResetPasswordDto {
   activationToken: string;
 }
 
-// COMPLETE SET OF INFRASTRUCTURE in code
-//final set view point
-//fine set
-//final 
