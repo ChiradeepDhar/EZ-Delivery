@@ -8,6 +8,14 @@ import { PrismaService } from '../../../prisma/prisma.service';
 import { Response } from "express";
 import * as bcrypt from "bcrypt";
 
+interface UserData {
+  name: string;
+  email: string;
+  password: string;
+  phone_number: number;
+}
+
+
 
 @Injectable()
 export class UserService {
@@ -47,20 +55,40 @@ export class UserService {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await this.prisma.user.create({
-      data: {
-        name,
-        email,
-        password: hashedPassword,
-        phone_number,
+    const user = {
+      name,
+      email,
+      password: hashedPassword,
+      phone_number,
 
-      },
-    });
+    };
+
+    const activationToken = await this.createActivationToken(user);
+
+    const activationCode = activationToken.activationCode;
+
+    console.log(activationCode);
 
     return { user, response };
   }
 
 
+  // create activation token
+  async createActivationToken(user: UserData) {
+    const activationCode = Math.floor(1000 + Math.random() * 9000).toString();
+
+    const token = this.jwtService.sign(
+      {
+        user,
+        activationCode,
+      },
+      {
+        secret: this.configService.get<string>('ACTIVATION_SECRET'),
+        expiresIn: '5m',
+      }
+    );
+    return { token, activationCode };
+  }
 
 
   //login user service

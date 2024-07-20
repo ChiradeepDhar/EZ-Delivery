@@ -15,6 +15,7 @@ import { UsersResolver } from './user.resolver';
 // import { UsersResolver } from './user.resolver';
 // import { EmailModule } from './email/email.module';
 // import { UsersService } from './user.service';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { UsersResolver } from './user.resolver';
         federation: 2,
       },
     }),
+    EmailModule,
     // EmailModule,
   ],
   controllers: [UserController],
