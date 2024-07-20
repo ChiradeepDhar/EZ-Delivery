@@ -20,9 +20,9 @@ export class RegisterDto {
   @IsEmail({}, { message: 'Email is invalid.' })
   email: string;
 
-  @Field()
+  @Field({ nullable: true })
   @IsNotEmpty({ message: 'Phone Number is required.' })
-  phone_number: number;
+  phone_number?: number;
 }
 
 @InputType()
@@ -67,4 +67,3 @@ export class ResetPasswordDto {
   @IsNotEmpty({ message: 'Activation Token is required.' })
   activationToken: string;
 }
-

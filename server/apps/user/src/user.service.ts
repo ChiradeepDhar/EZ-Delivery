@@ -1,28 +1,67 @@
 /* eslint-disable prettier/prettier */
 
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto, RegisterDto } from './dto/user.dto';
+import { PrismaService } from '../../../prisma/prisma.service';
+import { Response } from "express";
+import * as bcrypt from "bcrypt";
+
 
 @Injectable()
 export class UserService {
+  getHello(): string {
+    throw new Error('Method not implemented.');
+  }
   constructor(
     private readonly jwtService: JwtService,
-    //private readonly prisma:
+    private readonly prisma: PrismaService,
     private readonly configService: ConfigService,
   ) { }
 
   //register user service
-  async register(registerDto: RegisterDto) {
-    const { name, email, password } = registerDto;
-    const user = {
-      name,
-      email,
-      password,
+  async register(registerDto: RegisterDto, response: Response) {
+    const { name, email, password, phone_number } = registerDto;
+    const IsEmailExist = await this.prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (IsEmailExist) {
+      throw new BadRequestException('User already exist with this email!');
+    }
+
+    const isPhoneNumberExist = await this.prisma.user.findUnique({
+      where: {
+        phone_number,
+      },
+    });
+
+    if (isPhoneNumberExist) {
+      throw new BadRequestException('User already exist with this number!');
     };
-    return user;
+
+
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await this.prisma.user.create({
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+        phone_number,
+
+      },
+    });
+
+    return { user, response };
   }
+
+
+
 
   //login user service
   async Login(loginDto: LoginDto) {
@@ -36,16 +75,7 @@ export class UserService {
 
   //get all users service
   async getUsers() {
-    const users = [
-      {
-        id: "1234",
-        name: "test",
-        email: "abc@gmail.com",
-        password: "1234567"
-      }
-    ];
-
-    return users;
+    return this.prisma.user.findMany({});
   }
 }
 

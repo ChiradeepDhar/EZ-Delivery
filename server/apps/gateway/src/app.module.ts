@@ -1,18 +1,23 @@
 /* eslint-disable prettier/prettier */
-
+//app.module.ts
 import { Module } from '@nestjs/common';
 import { AppService } from './app.service';
-import {GraphQLModule} from "@nestjs/graphql";
-import { IntrospectAndCompose } from '@apollo/gateway';
+import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloGatewayDriver, ApolloGatewayDriverConfig } from '@nestjs/apollo';
+import { IntrospectAndCompose } from '@apollo/gateway';
 
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloGatewayDriverConfig>({
-      driver :ApolloGatewayDriver,
+      driver: ApolloGatewayDriver,
       gateway: {
-        supergraphSdl : new IntrospectAndCompose({
-          subgraphs: [],
+        supergraphSdl: new IntrospectAndCompose({
+          subgraphs: [
+            {
+              name: 'users',
+              url: 'http://localhost:4001/graphql',
+            },
+          ],
         }),
       },
     }),
@@ -20,4 +25,4 @@ import { ApolloGatewayDriver, ApolloGatewayDriverConfig } from '@nestjs/apollo';
   controllers: [],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

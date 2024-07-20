@@ -39,10 +39,10 @@ export class User {
     role: string;
 
     @Field({ nullable: true })
-    address: string;
+    address?: string;
 
     @Field({ nullable: true })
-    phone_number: number;
+    phone_number?: number;
 
     @Field()
     createdAt: Date;

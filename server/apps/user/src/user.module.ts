@@ -10,10 +10,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
+import { PrismaService } from '../../../prisma/prisma.service';
+import { UsersResolver } from './user.resolver';
 // import { UsersResolver } from './user.resolver';
 // import { EmailModule } from './email/email.module';
 // import { UsersService } from './user.service';
-// import {PrismaService} from "../prisma/prisma.service";
 
 @Module({
   imports: [
@@ -33,8 +34,8 @@ import { UserService } from './user.service';
     UserService,
     ConfigService,
     JwtService,
-    // PrismaService,
-    // UsersResolver,
+    PrismaService,
+    UsersResolver,
   ],
 })
-export class UserModule {}
+export class UserModule { }
